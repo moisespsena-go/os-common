@@ -1,2 +1,2 @@
-# ostypes
+# os-common
 Golang OS common types
