@@ -29,16 +29,16 @@ func (ar *PathError) Error() string {
 	return fmt.Sprintf("Asset %q: %v", ar.Name, strings.Join(append([]string{ar.Err.Error()}, ar.Messages...), " -- "))
 }
 
-func ErrNotFound(name string) error {
-	return &PathError{Name: name, Err: os.ErrNotExist}
+func ErrNotFound(name string, msg ...string) error {
+	return &PathError{Name: name, Err: os.ErrNotExist, Messages: msg}
 }
 
-func ErrNotDir(name string) error {
-	return &PathError{Name: name, Err: errNotIsDir}
+func ErrNotDir(name string, msg ...string) error {
+	return &PathError{Name: name, Err: errNotIsDir, Messages: msg}
 }
 
-func ErrNotFile(name string) error {
-	return &PathError{Name: name, Err: errNotIsFile}
+func ErrNotFile(name string, msg ...string) error {
+	return &PathError{Name: name, Err: errNotIsFile, Messages: msg}
 }
 
 func IsErr(this error, err ...error) bool {
@@ -65,7 +65,7 @@ func IsErr(this error, err ...error) bool {
 }
 
 func IsNotFound(err error) (ok bool) {
-	return IsErr(err, errNotIsFile, os.ErrNotExist)
+	return os.IsNotExist(err) || IsErr(err, errNotIsFile, os.ErrNotExist)
 }
 
 func IsNotDir(err error) (ok bool) {
